@@ -17,7 +17,7 @@ import static javafx.application.Application.launch;
  * Created by Maksym on 2015-07-20.
  */
 public class Window extends JFrame {
-
+    XYChart.Series series;
     JLabel jlForce, jlHeight, jlMaxHeight;
     String MaxHeight = "";
 
@@ -34,7 +34,6 @@ public class Window extends JFrame {
         getContentPane().add(jlForce);
         getContentPane().add(jlHeight);
         getContentPane().add(jlMaxHeight);
-
 
     }
 
@@ -59,20 +58,21 @@ public class Window extends JFrame {
     }
     public class LineChartSample extends Application {
 
-        @Override public void start(Stage stage) {
+         public void start(Stage stage) {
             stage.setTitle("Line Chart Sample");
             //defining the axes
             final NumberAxis xAxis = new NumberAxis();
             final NumberAxis yAxis = new NumberAxis();
-            xAxis.setLabel("Number of Month");
+            xAxis.setLabel("Droga");
+            yAxis.setLabel("Wysokość");
             //creating the chart
             final LineChart<Number,Number> lineChart =
                     new LineChart<Number,Number>(xAxis,yAxis);
 
-            lineChart.setTitle("Stock Monitoring, 2010");
+            lineChart.setTitle("Rzut");
             //defining a series
-            XYChart.Series series = new XYChart.Series();
-            series.setName("My portfolio");
+            series = new XYChart.Series();
+            series.setName("Tor");
             //populating the series with data
             series.getData().add(new XYChart.Data(1, 23));
             series.getData().add(new XYChart.Data(2, 14));
