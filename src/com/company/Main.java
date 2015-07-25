@@ -1,13 +1,7 @@
 package com.company;
 
-import com.company.Window.*;
-
-import com.company.Window.LineChartSample;
-import com.sun.glass.ui.Application;
 
 import java.io.IOException;
-
-import static javafx.application.Application.launch;
 
 public class Main {
 
@@ -19,7 +13,6 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        LineChartSample LCS = new LineChartSample(Application);
 
     }
 }

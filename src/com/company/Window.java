@@ -2,10 +2,7 @@ package com.company;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.stage.Stage;
 
 import javax.swing.*;
@@ -18,23 +15,40 @@ import static javafx.application.Application.launch;
  */
 public class Window extends JFrame {
     XYChart.Series series;
+    JPanel canvas;
     JLabel jlForce, jlHeight, jlMaxHeight;
+    JTextField jfForce, jfHeight;
     String MaxHeight = "";
 
     public void Window() throws Exception {
+       /* MyChart mc = new MyChart() {
+            @Override
+            protected void layoutChartChildren(double top, double left, double width, double height) {
 
-
-        setSize(1280, 1024);
+            }
+        };
+*/
+        setSize(1000,700);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
+        //mc.start();
+        ChartInit();
+
+
+    }
+    public void ChartInit(){
         Labels();
-        getContentPane().setLayout(null);
+        TextFields();
+        Panel();
         getContentPane().add(jlForce);
         getContentPane().add(jlHeight);
         getContentPane().add(jlMaxHeight);
-
+        getContentPane().add(jfForce);
+        getContentPane().add(jfHeight);
+        getContentPane().add(canvas);
+        repaint();
     }
 
     public void Labels() {
@@ -43,20 +57,35 @@ public class Window extends JFrame {
         jlForce.setBounds(20, 100, 200, 25);
         jlForce.setFont(new Font("TimesNewRoman", Font.BOLD, 20));
 
-
         jlHeight = new JLabel("Wysokość");
         jlHeight.setVisible(true);
         jlHeight.setBounds(20, 200, 200, 25);
         jlHeight.setFont(new Font("TimesNewRoman", Font.BOLD, 20));
 
-        jlMaxHeight = new JLabel("Maksymalna wysokość");
+        jlMaxHeight = new JLabel("Max wysokość");
         jlMaxHeight.setVisible(true);
-        jlMaxHeight.setBounds(20, 800, 250, 25);
+        jlMaxHeight.setBounds(20, 500, 200, 25);
         jlMaxHeight.setFont(new Font("TimesNewRoman", Font.BOLD, 20));
 
 
     }
-    public class LineChartSample extends Application {
+        public void TextFields() {
+            jfForce = new JTextField("");
+            jfForce.setVisible(true);
+            jfForce.setBounds(20, 140, 150, 25);
+
+            jfHeight = new JTextField("");
+            jfHeight.setVisible(true);
+            jfHeight.setBounds(20, 240, 150, 25);
+        }
+        public void Panel(){
+            canvas = new JPanel();
+            canvas.setVisible(true);
+            canvas.setBounds(250,25,700,600);
+            canvas.setBackground(Color.black);
+
+        }
+   /* public abstract class MyChart extends Chart {
 
          public void start(Stage stage) {
             stage.setTitle("Line Chart Sample");
@@ -89,11 +118,12 @@ public class Window extends JFrame {
 
             Scene scene  = new Scene(lineChart,800,600);
             lineChart.getData().add(series);
-
+            lineChart.setVisible(true);
+            lineChart.setMaxSize(800,600);
             stage.setScene(scene);
             stage.show();
         }
-    }
+    }*/
 }
 
 
