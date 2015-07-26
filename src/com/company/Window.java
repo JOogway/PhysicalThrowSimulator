@@ -1,6 +1,5 @@
 package com.company;
 
-import com.company.Physics;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,26 +11,25 @@ import java.awt.event.ActionListener;
  */
 public class Window extends JFrame implements ActionListener {
 
-
     public Physics p = new Physics();
     JButton activator, next1,next2;
     JLabel jlForce, jlHeight, jlMaxHeight, jlAngle;
     JTextField jfForce, jfHeight, jfAngle;
-    Color colorToUse;
-    int X1,X2,Y1,Y2,MaxHeight,i,StartHeight = 0,Force,Angle;
+    JTextPane explain, equation;
+    int X1,X2,Y1,Y2,MaxHeight,StartHeight = 0,Force,Angle;
 
     public void Window() throws Exception {
-
         setSize(1000,700);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
-        //ChartInit();
+        getContentPane().setLayout(null);
         Labels();
         TextFields();
-        p.Physics(getGraphics());
+        p.PhysicsInit(getGraphics());
         Buttons();
+        TextPane();
         ExplanationInit();
         repaint();
 
@@ -49,15 +47,28 @@ public class Window extends JFrame implements ActionListener {
         repaint();
     }
     public void ExplanationInit(){
-       getContentPane().add(next1);
+        getContentPane().add(explain);
+        getContentPane().add(next1);
         repaint();
 
 
 
     }
     public void EquationsInit(){
+        getContentPane().add(equation);
         getContentPane().add(next2);
         repaint();
+    }
+    public void TextPane(){
+        explain = new JTextPane();
+        explain.setBounds(20,20,960,550);
+        explain.setVisible(true);
+        explain.setEditable(false);
+
+        equation = new JTextPane();
+        equation.setBounds(20,20,960,550);
+        equation.setVisible(true);
+        equation.setEditable(false);
     }
 
     public void Labels() {
@@ -103,7 +114,7 @@ public class Window extends JFrame implements ActionListener {
 
         public void Buttons(){
             activator = new JButton("Symuluj");
-            activator.setBounds(20,450,100,50);
+            activator.setBounds(20,380,100,50);
             activator.setVisible(true);
             activator.addActionListener(this);
 
@@ -119,32 +130,25 @@ public class Window extends JFrame implements ActionListener {
 
         }
 
-      /*  public void paint(Graphics g) {
-                g.drawLine(X1, Y1, X2, Y2);
-    }*/
-
     @Override
     public void actionPerformed(ActionEvent e) {
         Object bSource = e.getSource();
         if(bSource == activator){
             Angle = Integer.parseInt(jfAngle.getText());
-            Force = Integer.parseInt(jlForce.getText());
-            StartHeight = Integer.parseInt(jlHeight.getText());
+            Force = Integer.parseInt(jfForce.getText());
+            StartHeight = Integer.parseInt(jfHeight.getText());
+            p.getGraphics().drawLine(2, 2, 2, 600);
+            p.getGraphics().drawLine(1,598,749,598);
 
-            for(X1=100;X1>0;X1--){
-                X2=X1;
-            for(Y1=100; Y1>0; Y1--) {
-                Y2=Y1;
-                p.getGraphics().drawLine(X1,Y1,X2,Y2);
-            }
-            }
         }else if(bSource == next1){
             remove(next1);
+            remove(explain);
             repaint();
             EquationsInit();
         }
         else if (bSource == next2) {
             remove(next2);
+            remove(equation);
             repaint();
             ChartInit();
         }
@@ -155,15 +159,14 @@ public class Window extends JFrame implements ActionListener {
 }
  class Physics extends JPanel {
 
-    public void Physics(Graphics g) {
+    public void PhysicsInit(Graphics g) {
         FlowLayout fl = new FlowLayout(0,50,40);
         setLayout(fl);
         setBounds(220, 50, 750, 600);
         setBackground(Color.LIGHT_GRAY);
         setVisible(true);
-        g.setColor(Color.WHITE);
+        g.setColor(Color.BLACK);
 
-        setAlignmentX(23);
 
 
     }
