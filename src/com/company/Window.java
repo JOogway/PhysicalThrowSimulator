@@ -1,9 +1,13 @@
 package com.company;
 
+import jdk.internal.org.objectweb.asm.tree.analysis.Value;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Arc2D;
+import java.math.*;
 
 
 /**
@@ -13,10 +17,11 @@ public class Window extends JFrame implements ActionListener {
 
     public Physics p = new Physics();
     JButton activator, next1,next2;
-    JLabel jlForce, jlHeight, jlMaxHeight, jlAngle;
-    JTextField jfForce, jfHeight, jfAngle;
+    JLabel jlSpeed, jlHeight, jlMaxHeight, jlAngle;
+    JTextField jfSpeed, jfHeight, jfAngle;
     JTextPane explain, equation;
-    int X1,X2,Y1,Y2,MaxHeight,StartHeight = 0,Force,Angle;
+    double g = 9.8f,X, MaxHeight,StartHeight = 0, Speed, Angle;
+
 
     public void Window() throws Exception {
         setSize(1000,700);
@@ -36,12 +41,10 @@ public class Window extends JFrame implements ActionListener {
     }
     public void ChartInit(){
         getContentPane().add(activator);
-        getContentPane().add(jlForce);
-        getContentPane().add(jlHeight);
+        getContentPane().add(jlSpeed);
         getContentPane().add(jlMaxHeight);
         getContentPane().add(jlAngle);
-        getContentPane().add(jfForce);
-        getContentPane().add(jfHeight);
+        getContentPane().add(jfSpeed);
         getContentPane().add(jfAngle);
         getContentPane().add(p);
         repaint();
@@ -61,32 +64,25 @@ public class Window extends JFrame implements ActionListener {
     }
     public void TextPane(){
         explain = new JTextPane();
-        explain.setBounds(20,20,960,550);
+        explain.setBounds(20, 20, 960, 550);
         explain.setVisible(true);
         explain.setEditable(false);
 
         equation = new JTextPane();
-        equation.setBounds(20,20,960,550);
+        equation.setBounds(20, 20, 960, 550);
         equation.setVisible(true);
         equation.setEditable(false);
     }
 
     public void Labels() {
-        jlForce = new JLabel("Siła");
-        jlForce.setBounds(20, 100, 200, 25);
-        jlForce.setFont(new Font("TimesNewRoman", Font.BOLD, 20));
-        jlForce.setToolTipText("Wprowadź Vo");
-        jlForce.setVisible(true);
-
-
-        jlHeight = new JLabel("Wysokość pocz.");
-        jlHeight.setBounds(20, 200, 200, 25);
-        jlHeight.setFont(new Font("TimesNewRoman", Font.BOLD, 20));
-        jlHeight.setToolTipText("Domyślnie zero");
-        jlHeight.setVisible(true);
+        jlSpeed= new JLabel("Prędkość początkowa");
+        jlSpeed.setBounds(20, 100, 200, 25);
+        jlSpeed.setFont(new Font("TimesNewRoman", Font.BOLD, 20));
+        jlSpeed.setToolTipText("Wprowadź Vo");
+        jlSpeed.setVisible(true);
 
         jlAngle = new JLabel("Kąt");
-        jlAngle.setBounds(20,300,200,25);
+        jlAngle.setBounds(20,200,200,25);
         jlAngle.setFont(new Font("TimesNewRoman", Font.BOLD, 20));
         jlAngle.setToolTipText("Wprowadź kąt początkowy");
         jlAngle.setVisible(true);
@@ -99,16 +95,12 @@ public class Window extends JFrame implements ActionListener {
 
     }
         public void TextFields() {
-            jfForce = new JTextField("0");
-            jfForce.setBounds(20, 140, 150, 25);
-            jfForce.setVisible(true);
-
-            jfHeight = new JTextField("0");
-            jfHeight.setBounds(20, 240, 150, 25);
-            jfHeight.setVisible(true);
+            jfSpeed = new JTextField("0");
+            jfSpeed.setBounds(20, 140, 150, 25);
+            jfSpeed.setVisible(true);
 
             jfAngle = new JTextField("0");
-            jfAngle.setBounds(20,340,150,25);
+            jfAngle.setBounds(20, 240, 150, 25);
             jfAngle.setVisible(true);
         }
 
@@ -129,18 +121,35 @@ public class Window extends JFrame implements ActionListener {
             next2.addActionListener(this);
 
         }
-
+        public void draw(){
+            double mathPowS = Math.pow(Speed,2);
+            double mathPowG = (mathPowS/g);
+            double mathSin =  Math.sin(2 * Angle);
+            double mathTanA=  Math.tan(Angle);
+            double mathCosPowA= Math.pow(Math.cos(Angle), 2);
+            double Xmax =  ( mathPowG * mathSin);
+            System.out.println("Moje Xmax: " + Xmax);
+            System.out.println("Moje mathSin: ");
+            //jfAngle.setText(String.valueOf(Y))
+            int Xmax2 = (int) Xmax;
+            for(int X=0; X <Xmax2;X++){
+                double mathPowX = Math.pow(X,2);
+                int Y = (int) ((X * mathTanA) - ((g / (2 * mathPowS * mathCosPowA)) * mathPowX));
+                System.out.println(Y);
+                p.getGraphics().drawLine(X, (600-Y), X, (600-Y));
+            }
+        }
     @Override
     public void actionPerformed(ActionEvent e) {
         Object bSource = e.getSource();
         if(bSource == activator){
             Angle = Integer.parseInt(jfAngle.getText());
-            Force = Integer.parseInt(jfForce.getText());
-            StartHeight = Integer.parseInt(jfHeight.getText());
-            p.getGraphics().drawLine(2, 2, 2, 600);
-            p.getGraphics().drawLine(1,598,749,598);
-
-        }else if(bSource == next1){
+            Speed = Integer.parseInt(jfSpeed.getText());
+            p.getGraphics().drawLine(1, 1, 1, 600);
+            p.getGraphics().drawLine(1, 599, 749, 599);
+            draw();
+        }
+        else if(bSource == next1){
             remove(next1);
             remove(explain);
             repaint();
@@ -166,9 +175,6 @@ public class Window extends JFrame implements ActionListener {
         setBackground(Color.LIGHT_GRAY);
         setVisible(true);
         g.setColor(Color.BLACK);
-
-
-
     }
 }
 
